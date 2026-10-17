@@ -1,0 +1,33 @@
+{
+    "name": "k3/inventaris-toko-lab",
+    "description": "Sistem inventaris toko/lab dengan security by design.",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "classmap": [
+            "core/",
+            "app/controllers/",
+            "app/models/",
+            "app/services/",
+            "app/repositories/",
+            "app/middleware/",
+            "app/validators/",
+            "app/policies/"
+        ]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-security": "phpunit tests/Security"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

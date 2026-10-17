@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+/vendor/
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/cache/*
+!/storage/cache/.gitkeep
+.phpunit.cache/
+coverage/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
