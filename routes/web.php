@@ -2,4 +2,6 @@
 
 declare(strict_types=1);
 
-// TODO: Daftarkan route web dan metode HTTP yang diizinkan.
+$app->get('/', static function (): void {
+    (new DashboardController())->index();
+});
