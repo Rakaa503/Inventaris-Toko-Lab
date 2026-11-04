@@ -1,0 +1,349 @@
+
+
+==================================================
+FILE: composer.json
+==================================================
+{
+    "name": "k3/inventaris-toko-lab",
+    "description": "Sistem inventaris toko/lab dengan security by design.",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "classmap": [
+            "core/",
+            "app/controllers/",
+            "app/models/",
+            "app/services/",
+            "app/repositories/",
+            "app/middleware/",
+            "app/validators/",
+            "app/policies/"
+        ]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-security": "phpunit tests/Security"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
+
+
+==================================================
+FILE: phpunit.xml
+==================================================
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         failOnWarning="true"
+         failOnRisky="true">
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Security">
+            <directory>tests/Security</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
+
+
+==================================================
+FILE: config/app.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Baca konfigurasi aplikasi dari environment.
+
+
+==================================================
+FILE: config/database.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Konfigurasi database. Jangan hardcode kredensial.
+
+
+==================================================
+FILE: core/Database.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+final class Database
+{
+    private static ?PDO $connection = null;
+
+    private function __construct()
+    {
+    }
+
+    public static function getConnection(): PDO
+    {
+        if (self::$connection instanceof PDO) {
+            return self::$connection;
+        }
+
+        $host = Env::get('DB_HOST', '127.0.0.1');
+        $port = Env::get('DB_PORT', '3306');
+        $name = Env::get('DB_NAME', 'inventaris_k3');
+        $charset = Env::get('DB_CHARSET', 'utf8mb4');
+        $username = Env::get('DB_USERNAME', 'root');
+        $password = Env::get('DB_PASSWORD', '');
+
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
+            throw new RuntimeException('Nama database tidak valid.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $charset)) {
+            throw new RuntimeException('Charset database tidak valid.');
+        }
+
+        $dsn = sprintf(
+            'mysql:host=%s;port=%s;dbname=%s;charset=%s',
+            $host,
+            $port,
+            $name,
+            $charset
+        );
+
+        self::$connection = new PDO(
+            $dsn,
+            $username,
+            $password,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_STRINGIFY_FETCHES => false,
+            ]
+        );
+
+        return self::$connection;
+    }
+}
+
+
+==================================================
+FILE: core/Logger.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Implementasikan logging aman tanpa mencatat rahasia.
+
+
+==================================================
+FILE: core/Model.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Implementasikan base model menggunakan PDO.
+
+
+==================================================
+FILE: core/Controller.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Implementasikan base controller dan rendering view yang aman.
+
+
+==================================================
+FILE: app/validators/ItemValidator.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Validasi input barang.
+
+
+==================================================
+FILE: app/validators/TransactionValidator.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Validasi tipe transaksi dan jumlah stok.
+
+
+==================================================
+FILE: app/repositories/ItemRepository.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Query barang.
+
+
+==================================================
+FILE: app/repositories/TransactionRepository.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Query transaksi dan perubahan stok atomik.
+
+
+==================================================
+FILE: app/services/InventoryService.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Aturan bisnis stok dan validasi transaksi atomik.
+
+
+==================================================
+FILE: app/models/Item.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Model barang.
+
+
+==================================================
+FILE: app/models/Transaction.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Model transaksi stok atomik.
+
+
+==================================================
+FILE: app/models/Category.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+// TODO: Model kategori.
+
+
+==================================================
+FILE: routes/web.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+$app->get('/', static function (): void {
+    (new DashboardController())->index();
+});
+
+
+==================================================
+FILE: config/bootstrap.php
+==================================================
+<?php
+
+declare(strict_types=1);
+
+define('ROOT_PATH', dirname(__DIR__));
+
+require_once ROOT_PATH . '/core/Env.php';
+
+Env::load(ROOT_PATH . '/.env');
+
+date_default_timezone_set(
+    Env::get('APP_TIMEZONE', 'Asia/Jakarta')
+);
+
+$baseUrl = rtrim(
+    Env::get('APP_URL', 'http://127.0.0.1:8081'),
+    '/'
+);
+
+if (!filter_var($baseUrl, FILTER_VALIDATE_URL)) {
+    throw new RuntimeException('APP_URL tidak valid.');
+}
+
+define('BASE_URL', $baseUrl);
+
+$isHttps = !empty($_SERVER['HTTPS'])
+    && $_SERVER['HTTPS'] !== 'off';
+
+$secureCookie = Env::get('SESSION_SECURE_COOKIE', 'false') === 'true';
+
+if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies', '1');
+
+    session_name(
+        Env::get('SESSION_NAME', 'k3_inventory_session')
+    );
+
+    session_set_cookie_params([
+        'httponly' => true,
+        'secure' => $secureCookie || $isHttps,
+        'samesite' => Env::get('SESSION_SAME_SITE', 'Lax'),
+        'path' => '/',
+    ]);
+
+    session_start();
+}
+
+function e(mixed $value): string
+{
+    return htmlspecialchars(
+        (string) $value,
+        ENT_QUOTES | ENT_SUBSTITUTE,
+        'UTF-8'
+    );
+}
+
+function url(string $path = ''): string
+{
+    return BASE_URL . (
+        $path === '' ? '/' : '/' . ltrim($path, '/')
+    );
+}
+
+
+==================================================
+FILE: docs/DATABASE.md
+==================================================
+# Database design
+
+Dokumentasikan ERD, tabel, constraint, indeks, migration,
+retensi audit log, backup, dan pemulihan database.
+
+
+==================================================
+FILE: docs/TESTING.md
+==================================================
+# Testing strategy
+
+Dokumentasikan langkah menjalankan test, data fixture,
+kriteria kelulusan, dan cara mereproduksi bug.
