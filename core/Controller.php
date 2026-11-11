@@ -17,7 +17,7 @@ abstract class Controller
         }
 
         $viewPath = ROOT_PATH
-            . '/resources/views/'
+            . '/app/views/'
             . $view
             . '.php';
 
