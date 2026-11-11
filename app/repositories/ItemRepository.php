@@ -11,8 +11,18 @@ final class ItemRepository
     public function findAll(): array
     {
         $statement = $this->pdo->query(
-            'SELECT id, category_id, code, name, description, stock,
-                    minimum_stock, unit, price
+            'SELECT
+                id,
+                category_id,
+                item_code,
+                name,
+                description,
+                quantity,
+                minimum_stock,
+                location,
+                condition_status,
+                created_at,
+                updated_at
              FROM items
              ORDER BY name ASC'
         );
@@ -23,11 +33,25 @@ final class ItemRepository
     public function findById(int $id): ?array
     {
         $statement = $this->pdo->prepare(
-            'SELECT id, category_id, code, name, description, stock,
-                    minimum_stock, unit, price
-             FROM items WHERE id = :id LIMIT 1'
+            'SELECT
+                id,
+                category_id,
+                item_code,
+                name,
+                description,
+                quantity,
+                minimum_stock,
+                location,
+                condition_status,
+                created_at,
+                updated_at
+             FROM items
+             WHERE id = :id
+             LIMIT 1'
         );
+
         $statement->execute(['id' => $id]);
+
         $item = $statement->fetch();
 
         return $item === false ? null : $item;
@@ -36,23 +60,36 @@ final class ItemRepository
     public function create(array $data): int
     {
         $statement = $this->pdo->prepare(
-            'INSERT INTO items
-                (category_id, code, name, description, stock,
-                 minimum_stock, unit, price)
-             VALUES
-                (:category_id, :code, :name, :description, :stock,
-                 :minimum_stock, :unit, :price)'
+            'INSERT INTO items (
+                category_id,
+                item_code,
+                name,
+                description,
+                quantity,
+                minimum_stock,
+                location,
+                condition_status
+             ) VALUES (
+                :category_id,
+                :item_code,
+                :name,
+                :description,
+                :quantity,
+                :minimum_stock,
+                :location,
+                :condition_status
+             )'
         );
 
         $statement->execute([
             'category_id' => $data['category_id'],
-            'code' => $data['code'],
+            'item_code' => $data['item_code'],
             'name' => $data['name'],
             'description' => $data['description'],
-            'stock' => $data['stock'],
+            'quantity' => $data['quantity'],
             'minimum_stock' => $data['minimum_stock'],
-            'unit' => $data['unit'],
-            'price' => $data['price'],
+            'location' => $data['location'],
+            'condition_status' => $data['condition_status'],
         ]);
 
         return (int) $this->pdo->lastInsertId();
@@ -63,26 +100,26 @@ final class ItemRepository
         $statement = $this->pdo->prepare(
             'UPDATE items SET
                 category_id = :category_id,
-                code = :code,
+                item_code = :item_code,
                 name = :name,
                 description = :description,
-                stock = :stock,
+                quantity = :quantity,
                 minimum_stock = :minimum_stock,
-                unit = :unit,
-                price = :price
+                location = :location,
+                condition_status = :condition_status
              WHERE id = :id'
         );
 
         $statement->execute([
             'id' => $id,
             'category_id' => $data['category_id'],
-            'code' => $data['code'],
+            'item_code' => $data['item_code'],
             'name' => $data['name'],
             'description' => $data['description'],
-            'stock' => $data['stock'],
+            'quantity' => $data['quantity'],
             'minimum_stock' => $data['minimum_stock'],
-            'unit' => $data['unit'],
-            'price' => $data['price'],
+            'location' => $data['location'],
+            'condition_status' => $data['condition_status'],
         ]);
 
         return $statement->rowCount() > 0;
@@ -90,7 +127,10 @@ final class ItemRepository
 
     public function delete(int $id): bool
     {
-        $statement = $this->pdo->prepare('DELETE FROM items WHERE id = :id');
+        $statement = $this->pdo->prepare(
+            'DELETE FROM items WHERE id = :id'
+        );
+
         $statement->execute(['id' => $id]);
 
         return $statement->rowCount() > 0;
