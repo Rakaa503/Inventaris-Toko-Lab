@@ -2,4 +2,12 @@
 
 declare(strict_types=1);
 
-// TODO: Implementasikan base model menggunakan PDO.
+abstract class Model
+{
+    protected PDO $pdo;
+
+    public function __construct(?PDO $pdo = null)
+    {
+        $this->pdo = $pdo ?? Database::getConnection();
+    }
+}

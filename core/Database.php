@@ -16,19 +16,38 @@ final class Database
             return self::$connection;
         }
 
-        $host = Env::get('DB_HOST', '127.0.0.1');
-        $port = Env::get('DB_PORT', '3306');
-        $name = Env::get('DB_NAME', 'inventaris_k3');
-        $charset = Env::get('DB_CHARSET', 'utf8mb4');
-        $username = Env::get('DB_USERNAME', 'root');
-        $password = Env::get('DB_PASSWORD', '');
+        $config = require ROOT_PATH . '/config/database.php';
 
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
+        $driver = $config['driver'] ?? 'mysql';
+        $host = $config['host'] ?? '127.0.0.1';
+        $port = $config['port'] ?? '3306';
+        $name = $config['database'] ?? '';
+        $charset = $config['charset'] ?? 'utf8mb4';
+        $username = $config['username'] ?? '';
+        $password = $config['password'] ?? '';
+
+        if ($driver !== 'mysql') {
+            throw new RuntimeException('Driver database tidak didukung.');
+        }
+
+        if (!is_string($host) || $host === '') {
+            throw new RuntimeException('Host database tidak valid.');
+        }
+
+        if (!is_string($port) || !ctype_digit($port)) {
+            throw new RuntimeException('Port database tidak valid.');
+        }
+
+        if (!is_string($name) || !preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
             throw new RuntimeException('Nama database tidak valid.');
         }
 
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $charset)) {
+        if (!is_string($charset) || !preg_match('/^[a-zA-Z0-9_]+$/', $charset)) {
             throw new RuntimeException('Charset database tidak valid.');
+        }
+
+        if (!is_string($username) || !is_string($password)) {
+            throw new RuntimeException('Kredensial database tidak valid.');
         }
 
         $dsn = sprintf(

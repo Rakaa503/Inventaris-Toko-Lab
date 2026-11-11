@@ -21,12 +21,14 @@ final class InventoryService
             throw new InvalidArgumentException('ID barang tidak valid.');
         }
 
-        if ($quantity < 1) {
-            throw new InvalidArgumentException('Jumlah transaksi minimal 1.');
+        if (!in_array($type, ['stock_in', 'stock_out', 'adjustment'], true)) {
+            throw new InvalidArgumentException('Tipe transaksi tidak valid.');
         }
 
-        if (!in_array($type, ['in', 'out'], true)) {
-            throw new InvalidArgumentException('Tipe transaksi harus in atau out.');
+        if ($quantity < 0 || ($type !== 'adjustment' && $quantity < 1)) {
+            throw new InvalidArgumentException(
+                'Jumlah transaksi tidak valid.'
+            );
         }
 
         if ($this->pdo->inTransaction()) {
