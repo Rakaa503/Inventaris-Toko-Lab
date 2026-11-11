@@ -146,7 +146,7 @@ Rizki mengerjakan bagian dasar aplikasi. Bagian ini penting, jadi
 dahulu, lalu lakukan perubahan kecil hanya bila Project Lead
 menyetujuinya.
 
-#### Apa itu Config?
+#### Apa itu Config?hmmm
 
 Config adalah tempat menyimpan pengaturan aplikasi, seperti nama
 aplikasi, mode pengembangan, dan pengaturan database.
