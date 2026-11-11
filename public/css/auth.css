@@ -1,0 +1,128 @@
+:root {
+    color-scheme: dark;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #17191e;
+    color: #e8e9ed;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background:
+        radial-gradient(ellipse at 15% 10%, #38232d 0, transparent 38%),
+        #17191e;
+}
+
+.login-panel {
+    width: 100%;
+    max-width: 420px;
+    padding: 36px;
+    border: 1px solid #343740;
+    border-radius: 12px;
+    background: #22252c;
+    box-shadow: 0 24px 70px rgb(0 0 0 / 28%);
+}
+
+.eyebrow {
+    margin: 0 0 12px;
+    color: #ef6684;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+h1 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 650;
+}
+
+.description {
+    margin: 10px 0 28px;
+    color: #a6a9b2;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+label {
+    display: block;
+    margin: 18px 0 8px;
+    color: #d7d8dd;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid #414550;
+    border-radius: 7px;
+    outline: none;
+    background: #191c22;
+    color: #f2f2f4;
+    font: inherit;
+}
+
+input:focus {
+    border-color: #e45c7c;
+    box-shadow: 0 0 0 3px rgb(228 92 124 / 13%);
+}
+
+button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 13px;
+    border: 0;
+    border-radius: 7px;
+    background: #d94e70;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #eb6383;
+}
+
+button:focus-visible {
+    outline: 3px solid #ff9bb1;
+    outline-offset: 3px;
+}
+
+.error {
+    margin: 18px 0;
+    padding: 12px;
+    border: 1px solid #854454;
+    border-radius: 7px;
+    background: #38232b;
+    color: #ffb6c5;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.footer {
+    margin: 25px 0 0;
+    color: #777c87;
+    font-family: Consolas, monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 16px;
+    }
+
+    .login-panel {
+        padding: 26px 22px;
+    }
+}
